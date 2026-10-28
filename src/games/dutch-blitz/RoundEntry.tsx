@@ -5,6 +5,7 @@ import { useGames } from '../../core/store'
 import type { Game } from '../../core/types'
 import { iconButton, primaryButton } from '../../ui/controls'
 import { playerLook } from './players'
+import { Rules } from './Rules'
 import {
   countScore,
   dutchBlitz,
@@ -32,6 +33,7 @@ export function RoundEntry({ game, roundId }: Props) {
   const navigate = useNavigate()
   const { addRound, editRound } = useGames()
   const editing = game.rounds.find((round) => round.id === roundId)
+  const [rulesOpen, setRulesOpen] = useState(false)
   const [drafts, setDrafts] = useState<Record<string, Draft>>(() => editing?.input ?? {})
 
   const index = editing ? game.rounds.indexOf(editing) : game.rounds.length
@@ -71,11 +73,19 @@ export function RoundEntry({ game, roundId }: Props) {
             </h1>
             <span className="font-mono text-[11px] text-muted">first to {TARGET}</span>
           </div>
+          <button
+            type="button"
+            aria-label="How scoring works"
+            onClick={() => setRulesOpen(true)}
+            className={`${iconButton} ml-auto size-10 font-mono text-base font-semibold`}
+          >
+            ?
+          </button>
           <Link
             to={`/game/${game.id}`}
             replace
             aria-label="Close without saving"
-            className={`${iconButton} ml-auto size-10`}
+            className={`${iconButton} size-10`}
           >
             <span aria-hidden="true" className="text-xl">
               ×
@@ -169,6 +179,7 @@ export function RoundEntry({ game, roundId }: Props) {
           </button>
         </footer>
       </div>
+      <Rules open={rulesOpen} onClose={() => setRulesOpen(false)} sides={game.sides} />
     </div>
   )
 }

@@ -3,10 +3,11 @@ import { Link } from 'react-router'
 import { num, replay, signed, type ReplayedRound, type Totals } from '../../core/game'
 import type { Game, Side } from '../../core/types'
 import { BoardFooter } from '../../ui/BoardFooter'
-import { TopBar } from '../../ui/controls'
+import { iconButton, TopBar } from '../../ui/controls'
 import { useCountUp } from '../../ui/useCountUp'
 import { explainCount } from './explain'
 import { playerLook } from './players'
+import { Rules } from './Rules'
 import { dutchBlitz, TARGET, type Round, type Settings } from './score'
 
 const calm = () => window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false
@@ -19,6 +20,7 @@ function rank(sides: Side[], totals: Totals) {
 export function Board({ game }: { game: Game<Settings, Round> }) {
   const { totals, rounds } = replay(dutchBlitz, game)
   const next = String(rounds.length + 1).padStart(2, '0')
+  const [rulesOpen, setRulesOpen] = useState(false)
 
   return (
     <div className="mx-auto flex min-h-dvh max-w-md flex-col">
@@ -27,7 +29,18 @@ export function Board({ game }: { game: Game<Settings, Round> }) {
         backLabel="Back to home"
         title="Dutch Blitz"
         subtitle={`round ${next} next · first to ${TARGET}`}
+        right={
+          <button
+            type="button"
+            aria-label="How scoring works"
+            onClick={() => setRulesOpen(true)}
+            className={`${iconButton} font-mono text-base font-semibold`}
+          >
+            ?
+          </button>
+        }
       />
+      <Rules open={rulesOpen} onClose={() => setRulesOpen(false)} sides={game.sides} />
       <Standings sides={game.sides} totals={totals} last={rounds.at(-1)} />
       <History gameId={game.id} sides={game.sides} rounds={rounds} />
       <BoardFooter game={game} roundName="round" />
