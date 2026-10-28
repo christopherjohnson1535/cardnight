@@ -20,10 +20,10 @@ function rank(sides: Side[], totals: Totals) {
   return sides.map((side) => side.id).sort((a, b) => totals[b] - totals[a])
 }
 
-export function Board({ game }: { game: Game<Settings, Round> }) {
+export function Board({ game, docked }: { game: Game<Settings, Round>; docked?: boolean }) {
   const { outcome } = replay(dutchBlitz, game)
   useKeepFinished(game, outcome !== null)
-  return outcome ? <Finished game={game} /> : <Scores game={game} />
+  return outcome ? <Finished game={game} /> : <Scores game={game} docked={docked} />
 }
 
 function Finished({ game }: { game: Game<Settings, Round> }) {
@@ -71,7 +71,7 @@ function Finished({ game }: { game: Game<Settings, Round> }) {
   )
 }
 
-function Scores({ game }: { game: Game<Settings, Round> }) {
+function Scores({ game, docked }: { game: Game<Settings, Round>; docked?: boolean }) {
   const { totals, rounds } = replay(dutchBlitz, game)
   const next = String(rounds.length + 1).padStart(2, '0')
   const [rulesOpen, setRulesOpen] = useState(false)
@@ -98,7 +98,7 @@ function Scores({ game }: { game: Game<Settings, Round> }) {
       <Standings sides={game.sides} totals={totals} last={rounds.at(-1)} />
       <History gameId={game.id} sides={game.sides} rounds={rounds} />
       <EndGame gameId={game.id} />
-      <BoardFooter game={game} roundName="round" />
+      <BoardFooter game={game} roundName="round" docked={docked} />
     </div>
   )
 }

@@ -26,10 +26,13 @@ export function Sheet({ open, onClose, title, subtitle, children }: SheetProps) 
       aria-label={title}
       onClose={onClose}
       onClick={(event) => event.target === ref.current && onClose()}
-      className="mx-auto mt-auto mb-0 max-h-[92dvh] animate-sheet w-full max-w-md overflow-hidden rounded-t-[26px] border-t border-line bg-surface text-ink backdrop:bg-black/60"
+      className="mx-auto mt-auto mb-0 max-h-[92dvh] w-full max-w-md animate-sheet overflow-hidden rounded-t-[26px] border-t border-line bg-surface text-ink backdrop:bg-black/60 md:mb-auto md:max-h-[86dvh] md:rounded-[26px] md:border"
     >
-      <div className="flex max-h-[92dvh] flex-col">
-        <div aria-hidden="true" className="mx-auto mt-2.5 h-1 w-10 shrink-0 rounded-full bg-line" />
+      <div className="flex max-h-[92dvh] flex-col md:max-h-[86dvh]">
+        <div
+          aria-hidden="true"
+          className="mx-auto mt-2.5 h-1 w-10 shrink-0 rounded-full bg-line md:invisible"
+        />
         <header className="flex shrink-0 items-center gap-3 px-4 pt-2 pb-3 pl-5">
           <div className="flex flex-col leading-tight">
             <h2 className="text-[22px] font-bold tracking-tight">{title}</h2>

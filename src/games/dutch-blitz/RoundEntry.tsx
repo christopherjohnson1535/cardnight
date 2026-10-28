@@ -4,6 +4,7 @@ import { num, replay, signed } from '../../core/game'
 import { useGames } from '../../core/store'
 import type { Game } from '../../core/types'
 import { iconButton, primaryButton } from '../../ui/controls'
+import { entryPage, entryPanel } from '../../ui/entry'
 import { playerLook } from './players'
 import { Rules } from './Rules'
 import {
@@ -21,6 +22,8 @@ type Props = {
   game: Game<Settings, Round>
   // set when fixing a round that's already saved
   roundId?: string
+  // shown beside the scoreboard on a wide screen
+  docked?: boolean
 }
 
 // a count while it's being filled in; blank until someone taps or types
@@ -29,7 +32,7 @@ type Draft = { middle?: number; left?: number }
 const complete = (draft: Draft | undefined): draft is Count =>
   draft?.middle !== undefined && draft.left !== undefined
 
-export function RoundEntry({ game, roundId }: Props) {
+export function RoundEntry({ game, roundId, docked = false }: Props) {
   const navigate = useNavigate()
   const { addRound, editRound } = useGames()
   const editing = game.rounds.find((round) => round.id === roundId)
@@ -63,9 +66,11 @@ export function RoundEntry({ game, roundId }: Props) {
   }
 
   return (
-    <div className="mx-auto flex min-h-dvh max-w-md flex-col pt-7">
-      <div className="flex flex-1 animate-sheet flex-col rounded-t-[26px] border-t border-line bg-surface shadow-[0_-20px_50px_rgb(0_0_0/0.35)]">
-        <div aria-hidden="true" className="mx-auto mt-2.5 h-1 w-10 rounded-full bg-line" />
+    <div className={entryPage(docked)}>
+      <div className={entryPanel(docked)}>
+        {!docked && (
+          <div aria-hidden="true" className="mx-auto mt-2.5 h-1 w-10 rounded-full bg-line" />
+        )}
         <header className="flex items-center gap-3 px-4 pt-2 pb-1 pl-5">
           <div className="flex flex-col leading-tight">
             <h1 className="text-[22px] font-bold tracking-tight">
@@ -81,16 +86,18 @@ export function RoundEntry({ game, roundId }: Props) {
           >
             ?
           </button>
-          <Link
-            to={`/game/${game.id}`}
-            replace
-            aria-label="Close without saving"
-            className={`${iconButton} size-10`}
-          >
-            <span aria-hidden="true" className="text-xl">
-              ×
-            </span>
-          </Link>
+          {(!docked || editing) && (
+            <Link
+              to={`/game/${game.id}`}
+              replace
+              aria-label="Close without saving"
+              className={`${iconButton} size-10`}
+            >
+              <span aria-hidden="true" className="text-xl">
+                ×
+              </span>
+            </Link>
+          )}
         </header>
 
         <p className="px-5 pt-1 pb-3 text-[15px] leading-snug text-muted">

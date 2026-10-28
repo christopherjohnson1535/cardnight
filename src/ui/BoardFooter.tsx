@@ -8,12 +8,14 @@ type Props = {
   game: Game
   // "hand" or "round"
   roundName: string
+  // round entry is already open beside the board
+  docked?: boolean
 }
 
 const pad = (n: number) => String(n).padStart(2, '0')
 
 // The bar at the bottom of a scoreboard: undo the last round, or enter the next one.
-export function BoardFooter({ game, roundName }: Props) {
+export function BoardFooter({ game, roundName, docked = false }: Props) {
   const { undoRound, addRound } = useGames()
   const next = pad(game.rounds.length + 1)
   const label = roundName[0].toUpperCase() + roundName.slice(1)
@@ -61,7 +63,11 @@ export function BoardFooter({ game, roundName }: Props) {
             type="button"
             aria-label={`Undo last ${roundName}`}
             onClick={undo}
-            className={`${iconButton} size-14 rounded-2xl`}
+            className={
+              docked
+                ? 'flex h-14 items-center gap-2 rounded-2xl border border-line bg-surface px-4 font-medium transition active:scale-95'
+                : `${iconButton} size-14 rounded-2xl`
+            }
           >
             <svg
               aria-hidden="true"
@@ -77,14 +83,17 @@ export function BoardFooter({ game, roundName }: Props) {
               <path d="M9 14L4 9l5-5" />
               <path d="M4 9h10a6 6 0 0 1 0 12h-3" />
             </svg>
+            {docked && <span aria-hidden="true">Undo last {roundName}</span>}
           </button>
         )}
-        <Link to={`/game/${game.id}/round`} className={primaryButton}>
-          Enter {roundName} {next}{' '}
-          <span aria-hidden="true" className="text-[22px]">
-            +
-          </span>
-        </Link>
+        {!docked && (
+          <Link to={`/game/${game.id}/round`} className={primaryButton}>
+            Enter {roundName} {next}{' '}
+            <span aria-hidden="true" className="text-[22px]">
+              +
+            </span>
+          </Link>
+        )}
       </div>
     </div>
   )
