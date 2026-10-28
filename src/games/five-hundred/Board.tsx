@@ -1,6 +1,7 @@
+import { Link } from 'react-router'
 import { replay } from '../../core/game'
 import type { Game } from '../../core/types'
-import { TopBar } from '../../ui/controls'
+import { primaryButton, TopBar } from '../../ui/controls'
 import { fiveHundred, type Hand, type Settings } from './score'
 import { teamLooks } from './teams'
 
@@ -29,6 +30,14 @@ export function Board({ game }: { game: Game<Settings, Hand> }) {
           )
         })}
       </section>
+      <div className="mt-auto px-5 pt-4 pb-6">
+        <Link to={`/game/${game.id}/round`} className={primaryButton}>
+          Enter hand {next}{' '}
+          <span aria-hidden="true" className="text-[22px]">
+            +
+          </span>
+        </Link>
+      </div>
     </div>
   )
 }
