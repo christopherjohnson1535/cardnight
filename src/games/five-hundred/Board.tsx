@@ -5,6 +5,7 @@ import { useGames } from '../../core/store'
 import type { Game, Round } from '../../core/types'
 import { iconButton, primaryButton, TopBar } from '../../ui/controls'
 import { History } from './History'
+import { Rules } from './Rules'
 import { fiveHundred, TARGET, type Hand, type Settings } from './score'
 import { teamLooks } from './teams'
 
@@ -19,6 +20,7 @@ export function Board({ game }: { game: Game<Settings, Hand> }) {
     totals[a.id] === totals[b.id] ? undefined : totals[a.id] > totals[b.id] ? a.id : b.id
 
   // the hand that was just undone, so it can be put back for a few seconds
+  const [rulesOpen, setRulesOpen] = useState(false)
   const [undone, setUndone] = useState<Round<Hand>>()
   useEffect(() => {
     if (!undone) return
@@ -35,7 +37,28 @@ export function Board({ game }: { game: Game<Settings, Hand> }) {
 
   return (
     <div className="mx-auto flex min-h-dvh max-w-md flex-col">
-      <TopBar back="/" backLabel="Back to home" title="500" subtitle={`hand ${next} next`} />
+      <TopBar
+        back="/"
+        backLabel="Back to home"
+        title="500"
+        subtitle={`hand ${next} next`}
+        right={
+          <button
+            type="button"
+            aria-label="How scoring works"
+            onClick={() => setRulesOpen(true)}
+            className={`${iconButton} font-mono text-base font-semibold`}
+          >
+            ?
+          </button>
+        }
+      />
+      <Rules
+        open={rulesOpen}
+        onClose={() => setRulesOpen(false)}
+        sides={game.sides}
+        settings={game.settings}
+      />
 
       <section aria-label="Totals" className="grid grid-cols-2 gap-3 px-5 pt-2">
         {game.sides.map((side, i) => (
