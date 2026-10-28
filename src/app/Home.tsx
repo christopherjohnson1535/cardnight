@@ -26,7 +26,7 @@ export function Home() {
         </div>
       </header>
 
-      <div className="px-5 pt-3 pb-5">
+      <div className="animate-rise px-5 pt-3 pb-5">
         <p className="label">The family scorekeeper</p>
         <h1 className="mt-2.5 text-[42px] leading-[1.02] font-bold tracking-tight">
           Deal 'em.
@@ -64,7 +64,8 @@ export function Home() {
               </span>
             </>
           )
-          const shape = `flex h-[150px] w-[108px] flex-col rounded-[14px] border p-3 transition ${tilt} ${look}`
+          const deal = ['', '[animation-delay:90ms]', '[animation-delay:180ms]'][i] ?? ''
+          const shape = `flex h-[150px] w-[108px] animate-deal flex-col rounded-[14px] border p-3 transition ${deal} ${tilt} ${look}`
           return game.definition ? (
             <Link
               key={game.id}
@@ -80,7 +81,7 @@ export function Home() {
           )
         })}
         {games.length < 3 && (
-          <div className="flex h-[150px] w-[108px] translate-y-1.5 rotate-5 flex-col rounded-[14px] border border-dashed border-line p-3 text-muted">
+          <div className="flex h-[150px] w-[108px] translate-y-1.5 rotate-5 animate-deal flex-col rounded-[14px] border border-dashed [animation-delay:270ms] border-line p-3 text-muted">
             <span className="font-mono text-[11px]">0{games.length + 1}</span>
             <span className="mt-auto text-xl leading-[1.05] font-semibold tracking-tight">
               More after Christmas
@@ -107,7 +108,7 @@ function ContinueCard({ gameId }: { gameId: string }) {
   return (
     <section
       aria-label="Game in progress"
-      className="paper relative mx-5 -rotate-[1.2deg] rounded-[18px] p-[18px] pb-4"
+      className="paper relative mx-5 -rotate-[1.2deg] animate-rise rounded-[18px] p-[18px] pb-4 [animation-delay:120ms]"
     >
       <p className="font-mono text-[11px] tracking-wider text-card-muted uppercase">
         In progress · {definition.roundName} {next}
@@ -130,7 +131,7 @@ function ContinueCard({ gameId }: { gameId: string }) {
               </div>
               <div className="h-1.5 overflow-hidden rounded-full bg-card-track">
                 <div
-                  className={`h-full rounded-full ${look.bar}`}
+                  className={`h-full origin-left animate-fill rounded-full ${look.bar}`}
                   style={{ width: `${share * 100}%` }}
                 />
               </div>

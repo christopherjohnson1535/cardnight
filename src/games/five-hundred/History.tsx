@@ -20,7 +20,7 @@ export function History({ gameId, sides, rounds }: Props) {
   if (rounds.length === 0) return null
 
   return (
-    <section aria-label="History" className="px-5 pt-6">
+    <section aria-label="History" className="animate-rise px-5 pt-6 [animation-delay:250ms]">
       <div className="flex justify-between pb-2.5">
         <h2 className="label">History</h2>
         <span className="font-mono text-xs text-muted">tap a hand to see why</span>

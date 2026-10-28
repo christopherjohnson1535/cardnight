@@ -4,6 +4,7 @@ import { replay, signed } from '../../core/game'
 import { useGames } from '../../core/store'
 import type { Game, Round } from '../../core/types'
 import { iconButton, primaryButton, TopBar } from '../../ui/controls'
+import { useCountUp } from '../../ui/useCountUp'
 import { Winner } from '../../ui/Winner'
 import { explainHand } from './explain'
 import { History } from './History'
@@ -120,6 +121,7 @@ function Scores({ game }: { game: Game<Settings, Hand> }) {
             name={side.name}
             total={totals[side.id]}
             change={last?.delta[side.id]}
+            hand={rounds.length}
             leading={side.id === leader}
           />
         ))}
@@ -187,11 +189,15 @@ type CardProps = {
   name: string
   total: number
   change?: number
+  // which hand the change came from, so the chip pops again after each one
+  hand: number
   leading: boolean
 }
 
-function ScoreCard({ index, name, total, change, leading }: CardProps) {
+function ScoreCard({ index, name, total, change, hand, leading }: CardProps) {
   const look = teamLooks[index]
+  // roll up from the total before the last hand
+  const shown = useCountUp(total, total - (change ?? 0), { delay: 500 })
   const toGo = TARGET - total
   const share = Math.max(0, Math.min(1, total / TARGET))
   const corner = (
@@ -206,7 +212,9 @@ function ScoreCard({ index, name, total, change, leading }: CardProps) {
   return (
     <div
       className={`paper relative flex h-[196px] flex-col rounded-2xl py-3.5 pr-3.5 pl-[34px] ${
-        index === 0 ? '-rotate-2' : 'rotate-[1.5deg]'
+        index === 0
+          ? '-rotate-2 animate-deal'
+          : 'rotate-[1.5deg] animate-deal [animation-delay:120ms]'
       } ${leading ? 'ring-[3px] ring-accent' : ''}`}
     >
       <span aria-hidden="true" className="absolute top-3 left-[11px] text-sm">
@@ -219,21 +227,28 @@ function ScoreCard({ index, name, total, change, leading }: CardProps) {
       <span className="flex items-center justify-between gap-1.5 font-semibold">
         <span className="truncate">{name}</span>
         {leading && (
-          <span className="shrink-0 rounded-full bg-accent px-2 py-0.5 font-mono text-[10px] tracking-wider text-accent-ink">
+          <span className="shrink-0 animate-chip rounded-full bg-accent px-2 py-0.5 font-mono text-[10px] tracking-wider text-accent-ink">
             LEADING
           </span>
         )}
       </span>
       <span className="mt-auto text-[54px] leading-none font-semibold tracking-tight tabular-nums">
-        {total < 0 ? `−${Math.abs(total)}` : total}
+        <span aria-hidden="true">{shown < 0 ? `−${Math.abs(shown)}` : shown}</span>
+        <span className="sr-only">{total}</span>
       </span>
       {change !== undefined && (
-        <span className="mt-1.5 self-start rounded-full bg-card-ink px-2 py-0.5 font-mono text-xs text-card">
+        <span
+          key={hand}
+          className="mt-1.5 animate-chip self-start rounded-full bg-card-ink px-2 py-0.5 font-mono text-xs text-card"
+        >
           {signed(change)}
         </span>
       )}
       <div className="mt-2.5 mr-[18px] h-[5px] overflow-hidden rounded-full bg-card-track">
-        <div className={`h-full ${look.bar}`} style={{ width: `${share * 100}%` }} />
+        <div
+          className={`h-full origin-left animate-fill transition-[width] duration-700 ${look.bar}`}
+          style={{ width: `${share * 100}%` }}
+        />
       </div>
       <span className="mt-1 font-mono text-[11px] text-card-muted">{toGo} to go</span>
     </div>

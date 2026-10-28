@@ -52,7 +52,7 @@ export function Rules({ open, onClose, sides, settings }: Props) {
                 return (
                   <td
                     key={suit}
-                    className={`h-8 rounded-md text-sm ${on ? 'bg-accent font-bold text-accent-ink' : 'bg-well'}`}
+                    className={`h-8 rounded-md text-sm ${on ? 'animate-highlight bg-accent font-bold text-accent-ink' : 'bg-well'}`}
                   >
                     {bidValue({ tricks, suit })}
                   </td>
