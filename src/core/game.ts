@@ -19,6 +19,9 @@ export type ScoreContext<Settings> = {
 export type GameDefinition<Settings, Input> = {
   id: string
   name: string
+  target: number
+  // what one round is called at the table: a "hand" in 500, a "round" in Dutch Blitz
+  roundName: string
   score: (input: Input, ctx: ScoreContext<Settings>) => Totals
   // runs after each round with the new totals; null means keep playing
   outcome: (input: Input, ctx: ScoreContext<Settings>) => Outcome | null
@@ -57,4 +60,10 @@ export function replay<Settings, Input>(
   }
 
   return { rounds, totals, outcome }
+}
+
+export function signed(n: number) {
+  if (n > 0) return `+${n}`
+  if (n < 0) return `−${Math.abs(n)}`
+  return '0'
 }

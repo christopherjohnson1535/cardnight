@@ -68,6 +68,8 @@ export function handOutcome(hand: Hand, ctx: ScoreContext<Settings>): Outcome | 
 export const fiveHundred: GameDefinition<Settings, Hand> = {
   id: '500',
   name: '500',
+  target: TARGET,
+  roundName: 'hand',
   score: scoreHand,
   outcome: handOutcome,
 }
