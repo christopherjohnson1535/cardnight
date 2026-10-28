@@ -4,6 +4,7 @@ import { replay, signed } from '../../core/game'
 import { useGames, useKeepFinished } from '../../core/store'
 import type { Game } from '../../core/types'
 import { BoardFooter } from '../../ui/BoardFooter'
+import { EndGame } from '../../ui/EndGame'
 import { iconButton, TopBar } from '../../ui/controls'
 import { useCountUp } from '../../ui/useCountUp'
 import { Winner } from '../../ui/Winner'
@@ -106,6 +107,7 @@ function Scores({ game }: { game: Game<Settings, Hand> }) {
       </section>
 
       <History gameId={game.id} sides={game.sides} rounds={rounds} />
+      <EndGame gameId={game.id} />
 
       <BoardFooter game={game} roundName="hand" />
     </div>

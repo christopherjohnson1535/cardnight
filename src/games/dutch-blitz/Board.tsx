@@ -4,6 +4,7 @@ import { num, replay, signed, type ReplayedRound, type Totals } from '../../core
 import { useGames, useKeepFinished } from '../../core/store'
 import type { Game, Side } from '../../core/types'
 import { BoardFooter } from '../../ui/BoardFooter'
+import { EndGame } from '../../ui/EndGame'
 import { iconButton, TopBar } from '../../ui/controls'
 import { useCountUp } from '../../ui/useCountUp'
 import { Winner } from '../../ui/Winner'
@@ -96,6 +97,7 @@ function Scores({ game }: { game: Game<Settings, Round> }) {
       <Rules open={rulesOpen} onClose={() => setRulesOpen(false)} sides={game.sides} />
       <Standings sides={game.sides} totals={totals} last={rounds.at(-1)} />
       <History gameId={game.id} sides={game.sides} rounds={rounds} />
+      <EndGame gameId={game.id} />
       <BoardFooter game={game} roundName="round" />
     </div>
   )

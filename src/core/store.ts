@@ -15,6 +15,7 @@ type Actions = {
   finishGame: (gameId: string) => void
   reopenGame: (gameId: string) => void
   removeGame: (gameId: string) => void
+  clearGames: () => void
 }
 
 export type GameStore = State & Actions
@@ -81,6 +82,8 @@ export const createGameStore = () =>
             delete games[gameId]
             return { games }
           }),
+
+        clearGames: () => set({ games: {} }),
       }),
       {
         name: 'cardnight:games',
