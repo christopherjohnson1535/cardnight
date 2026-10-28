@@ -10,6 +10,8 @@
   --table-pattern: rgb(243 237 226 / 0.035);
   --surface: #171c24;
   --raised: #1d232c;
+  /* inputs and buttons sit in a well, darker than the surface around them */
+  --well: #0e1218;
   --line: #262d38;
   --ink: #f3ede2;
   --muted: #a3a8b3;
@@ -36,6 +38,7 @@
   --table-pattern: rgb(20 24 31 / 0.045);
   --surface: #fffcf6;
   --raised: #efe8dc;
+  --well: #ffffff;
   --line: #ded5c4;
   --ink: #14181f;
   --muted: #5f5d57;
@@ -57,6 +60,7 @@
   --color-table: var(--table);
   --color-surface: var(--surface);
   --color-raised: var(--raised);
+  --color-well: var(--well);
   --color-line: var(--line);
   --color-ink: var(--ink);
   --color-muted: var(--muted);

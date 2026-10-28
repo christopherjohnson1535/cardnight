@@ -104,7 +104,7 @@ export function Setup() {
                     placeholder={`Player ${p + 1}`}
                     value={player}
                     onChange={(e) => setPlayer(i, p, e.target.value)}
-                    className="h-[42px] min-w-0 rounded-xl border border-line bg-table px-3.5 placeholder:text-muted/60 focus:border-accent focus:outline-none"
+                    className="h-[42px] min-w-0 rounded-xl border border-line bg-well px-3.5 placeholder:text-muted/60 focus:border-accent focus:outline-none"
                   />
                 ))}
               </div>

@@ -54,7 +54,7 @@ export function Segmented<T extends string>({
     <div
       role="group"
       aria-label={label}
-      className="flex shrink-0 rounded-full border border-line bg-table p-[3px]"
+      className="flex shrink-0 rounded-full border border-line bg-well p-[3px]"
     >
       {options.map((option) => {
         const on = option.value === value
