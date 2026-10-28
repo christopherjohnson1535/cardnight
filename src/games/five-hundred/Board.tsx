@@ -1,15 +1,67 @@
 import { useEffect, useState } from 'react'
-import { Link } from 'react-router'
+import { Link, useNavigate } from 'react-router'
 import { replay, signed } from '../../core/game'
 import { useGames } from '../../core/store'
 import type { Game, Round } from '../../core/types'
 import { iconButton, primaryButton, TopBar } from '../../ui/controls'
+import { Winner } from '../../ui/Winner'
+import { explainHand } from './explain'
 import { History } from './History'
 import { Rules } from './Rules'
 import { fiveHundred, TARGET, type Hand, type Settings } from './score'
 import { teamLooks } from './teams'
 
 export function Board({ game }: { game: Game<Settings, Hand> }) {
+  const { outcome } = replay(fiveHundred, game)
+  const { finishGame, reopenGame } = useGames()
+  const finished = game.finishedAt !== undefined
+
+  // keep finishedAt in step with the scores, so a fixed or undone hand reopens the game
+  useEffect(() => {
+    if (outcome && !finished) finishGame(game.id)
+    if (!outcome && finished) reopenGame(game.id)
+  }, [outcome, finished, game.id, finishGame, reopenGame])
+
+  return outcome ? <Finished game={game} /> : <Scores game={game} />
+}
+
+function Finished({ game }: { game: Game<Settings, Hand> }) {
+  const navigate = useNavigate()
+  const { startGame, undoRound } = useGames()
+  const { totals, rounds, outcome } = replay(fiveHundred, game)
+  const last = rounds.at(-1)!
+
+  const places = game.sides
+    .map((side, i) => ({
+      id: side.id,
+      name: side.name,
+      total: totals[side.id],
+      suit: teamLooks[i].suit,
+      red: teamLooks[i].red,
+    }))
+    .sort((x, y) => (x.id === outcome?.winner ? -1 : y.id === outcome?.winner ? 1 : 0))
+  const winner = places[0]
+
+  return (
+    <Winner
+      kicker={`Game over · 500 · ${rounds.length} ${rounds.length === 1 ? 'hand' : 'hands'}`}
+      headline={`${winner.name} win.`}
+      places={places}
+      rematchLabel="Rematch, same teams"
+      onRematch={() => {
+        const id = startGame('500', game.sides, game.settings)
+        navigate(`/game/${id}`, { replace: true })
+      }}
+      undoLabel="Last hand was wrong? Undo it"
+      onUndo={() => undoRound(game.id)}
+    >
+      <p>Last hand: {explainHand(last.input, game.sides, last.delta)}</p>
+      {outcome?.note && <p className="mt-1.5 text-ink">{outcome.note}</p>}
+    </Winner>
+  )
+}
+
+function Scores({ game }: { game: Game<Settings, Hand> }) {
   const { undoRound, addRound } = useGames()
   const { totals, rounds } = replay(fiveHundred, game)
   const next = String(rounds.length + 1).padStart(2, '0')
