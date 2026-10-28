@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useNavigate } from 'react-router'
 import { replay, signed } from '../../core/game'
-import { useGames } from '../../core/store'
+import { useGames, useKeepFinished } from '../../core/store'
 import type { Game } from '../../core/types'
 import { BoardFooter } from '../../ui/BoardFooter'
 import { iconButton, TopBar } from '../../ui/controls'
@@ -15,14 +15,7 @@ import { teamLooks } from './teams'
 
 export function Board({ game }: { game: Game<Settings, Hand> }) {
   const { outcome } = replay(fiveHundred, game)
-  const { finishGame, reopenGame } = useGames()
-  const finished = game.finishedAt !== undefined
-
-  // keep finishedAt in step with the scores, so a fixed or undone hand reopens the game
-  useEffect(() => {
-    if (outcome && !finished) finishGame(game.id)
-    if (!outcome && finished) reopenGame(game.id)
-  }, [outcome, finished, game.id, finishGame, reopenGame])
+  useKeepFinished(game, outcome !== null)
 
   return outcome ? <Finished game={game} /> : <Scores game={game} />
 }
