@@ -6,8 +6,10 @@ export type Place = {
   id: string
   name: string
   total: number
-  suit: string
-  red: boolean
+  // a suit for 500 teams, a color chip for Blitz players
+  suit?: string
+  red?: boolean
+  chip?: string
 }
 
 type Props = {
@@ -113,7 +115,11 @@ function PlaceCard({
       className={`flex flex-col items-center leading-none font-bold ${place.red ? 'text-suit-red' : ''}`}
     >
       {index + 1}
-      <span className="text-[13px]">{place.suit}</span>
+      {place.chip ? (
+        <span className={`mt-1 h-3 w-2 rounded-[2px] ${place.chip}`} />
+      ) : (
+        <span className="text-[13px]">{place.suit}</span>
+      )}
     </span>
   )
   const big = index === 0

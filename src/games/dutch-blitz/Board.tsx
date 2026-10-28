@@ -1,10 +1,12 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
-import { Link } from 'react-router'
+import { Link, useNavigate } from 'react-router'
 import { num, replay, signed, type ReplayedRound, type Totals } from '../../core/game'
+import { useGames, useKeepFinished } from '../../core/store'
 import type { Game, Side } from '../../core/types'
 import { BoardFooter } from '../../ui/BoardFooter'
 import { iconButton, TopBar } from '../../ui/controls'
 import { useCountUp } from '../../ui/useCountUp'
+import { Winner } from '../../ui/Winner'
 import { explainCount } from './explain'
 import { playerLook } from './players'
 import { Rules } from './Rules'
@@ -18,6 +20,57 @@ function rank(sides: Side[], totals: Totals) {
 }
 
 export function Board({ game }: { game: Game<Settings, Round> }) {
+  const { outcome } = replay(dutchBlitz, game)
+  useKeepFinished(game, outcome !== null)
+  return outcome ? <Finished game={game} /> : <Scores game={game} />
+}
+
+function Finished({ game }: { game: Game<Settings, Round> }) {
+  const navigate = useNavigate()
+  const { startGame, undoRound } = useGames()
+  const { totals, rounds, outcome } = replay(dutchBlitz, game)
+  const last = rounds.at(-1)!
+
+  const places = game.sides
+    .map((side, seat) => ({
+      id: side.id,
+      name: side.name,
+      total: totals[side.id],
+      chip: playerLook(seat).color,
+    }))
+    .sort((a, b) =>
+      a.id === outcome?.winner ? -1 : b.id === outcome?.winner ? 1 : b.total - a.total,
+    )
+  const callers = game.sides.filter((side) => last.input[side.id]?.left === 0)
+  const winner = places[0]
+  const scored = signed(last.delta[winner.id])
+  const lastRound =
+    callers.length === 0
+      ? `${winner.name} scored ${scored}.`
+      : callers.some((side) => side.id === winner.id)
+        ? `${winner.name} called Blitz for ${scored}.`
+        : `${callers.map((side) => side.name).join(' & ')} called Blitz, and ${winner.name} scored ${scored}.`
+
+  return (
+    <Winner
+      kicker={`Game over · Dutch Blitz · ${rounds.length} ${rounds.length === 1 ? 'round' : 'rounds'}`}
+      headline={`${winner.name} wins.`}
+      places={places}
+      rematchLabel="Rematch, same players"
+      onRematch={() => {
+        const id = startGame('blitz', game.sides, game.settings)
+        navigate(`/game/${id}`, { replace: true })
+      }}
+      undoLabel="Last round was wrong? Undo it"
+      onUndo={() => undoRound(game.id)}
+    >
+      <p>Last round: {lastRound}</p>
+      {outcome?.note && <p className="mt-1.5 text-ink">{outcome.note}</p>}
+    </Winner>
+  )
+}
+
+function Scores({ game }: { game: Game<Settings, Round> }) {
   const { totals, rounds } = replay(dutchBlitz, game)
   const next = String(rounds.length + 1).padStart(2, '0')
   const [rulesOpen, setRulesOpen] = useState(false)

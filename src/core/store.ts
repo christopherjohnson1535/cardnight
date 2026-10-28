@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
 import type { Game, Side } from './types'
@@ -103,4 +104,15 @@ export function latestOpenGame(games: Record<string, Game>): Game | undefined {
 // Browsers can clear site data when space runs low. Asking once makes that much less likely.
 export function askToKeepStorage() {
   navigator.storage?.persist?.().catch(() => {})
+}
+
+// Keep finishedAt in step with the scores, so fixing or undoing the winning round reopens the game.
+export function useKeepFinished(game: Game, over: boolean) {
+  const finishGame = useGames((state) => state.finishGame)
+  const reopenGame = useGames((state) => state.reopenGame)
+  const finished = game.finishedAt !== undefined
+  useEffect(() => {
+    if (over && !finished) finishGame(game.id)
+    if (!over && finished) reopenGame(game.id)
+  }, [over, finished, game.id, finishGame, reopenGame])
 }
