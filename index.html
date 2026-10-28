@@ -3,7 +3,24 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#0e1218" />
     <title>Card Night</title>
+    <script>
+      // set the theme before first paint so light mode doesn't flash dark
+      ;(function () {
+        var theme
+        try {
+          theme = localStorage.getItem('cardnight:theme')
+        } catch (e) {}
+        if (theme !== 'light' && theme !== 'dark') {
+          theme = matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark'
+        }
+        document.documentElement.dataset.theme = theme
+        if (theme === 'light') {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#f1ebe0')
+        }
+      })()
+    </script>
   </head>
   <body>
     <div id="root"></div>
