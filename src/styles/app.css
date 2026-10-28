@@ -9,16 +9,25 @@
   --table: #0e1218;
   --table-pattern: rgb(243 237 226 / 0.035);
   --surface: #171c24;
+  --raised: #1d232c;
   --line: #262d38;
   --ink: #f3ede2;
   --muted: #a3a8b3;
   --card: #f3ede2;
   --card-ink: #14181f;
   --card-muted: #5b5a55;
+  --card-track: #e2dacb;
+  --card-shadow: 0 14px 34px rgb(0 0 0 / 0.45), inset 0 1px 0 rgb(255 255 255 / 0.7);
   --suit-red: #d0331b;
   --accent: #ff5b3a;
   --accent-ink: #14181f;
   --accent-text: #ff5b3a;
+  --minus: #ff7a5f;
+  --team-a: #e2452a;
+  --team-b: #2f7fd6;
+  /* selected things: cream on the dark table */
+  --pick: #f3ede2;
+  --pick-ink: #14181f;
 }
 
 :root[data-theme='light'] {
@@ -26,30 +35,44 @@
   --table: #f1ebe0;
   --table-pattern: rgb(20 24 31 / 0.045);
   --surface: #fffcf6;
+  --raised: #efe8dc;
   --line: #ded5c4;
   --ink: #14181f;
   --muted: #5f5d57;
   --card: #ffffff;
   --card-ink: #14181f;
   --card-muted: #5f5d57;
+  --card-track: #ece5d8;
+  --card-shadow: 0 14px 30px rgb(70 50 20 / 0.15), 0 1px 0 rgb(70 50 20 / 0.06);
   --suit-red: #c62f17;
   /* vermilion is too light for text on cream */
   --accent-text: #d93a1f;
+  --minus: #c62f17;
+  /* selected things: ink on the cream table */
+  --pick: #14181f;
+  --pick-ink: #fffcf6;
 }
 
 @theme inline {
   --color-table: var(--table);
   --color-surface: var(--surface);
+  --color-raised: var(--raised);
   --color-line: var(--line);
   --color-ink: var(--ink);
   --color-muted: var(--muted);
   --color-card: var(--card);
   --color-card-ink: var(--card-ink);
   --color-card-muted: var(--card-muted);
+  --color-card-track: var(--card-track);
   --color-suit-red: var(--suit-red);
   --color-accent: var(--accent);
   --color-accent-ink: var(--accent-ink);
   --color-accent-text: var(--accent-text);
+  --color-minus: var(--minus);
+  --color-team-a: var(--team-a);
+  --color-team-b: var(--team-b);
+  --color-pick: var(--pick);
+  --color-pick-ink: var(--pick-ink);
 }
 
 @theme {
@@ -65,10 +88,30 @@
     repeating-linear-gradient(-45deg, var(--table-pattern) 0 1px, transparent 1px 18px);
 }
 
+/* a playing card: cream in the dark, white in the light */
+@utility paper {
+  background-color: var(--card);
+  color: var(--card-ink);
+  box-shadow: var(--card-shadow);
+}
+
+/* small mono labels above sections */
+@utility label {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
 @layer base {
   body {
     @apply card-back font-display text-ink antialiased;
     min-height: 100dvh;
+  }
+
+  button {
+    cursor: pointer;
   }
 
   :focus-visible {
