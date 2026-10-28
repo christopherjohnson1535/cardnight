@@ -82,6 +82,39 @@
 @theme {
   --font-display: 'Bricolage Grotesque Variable', system-ui, sans-serif;
   --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+
+  --animate-rise: rise 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+  --animate-deal-left: deal-left 1s cubic-bezier(0.2, 0.9, 0.25, 1.2) 0.5s both;
+  --animate-deal-right: deal-right 1s cubic-bezier(0.2, 0.9, 0.25, 1.2) 0.65s both;
+  --animate-fall: fall 6s linear infinite both;
+
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(24px) scale(0.96);
+    }
+  }
+  /* no "to" frame, so the cards land on whatever rotation their classes give them */
+  @keyframes deal-left {
+    from {
+      opacity: 0;
+      transform: translate(40px, 40px);
+    }
+  }
+  @keyframes deal-right {
+    from {
+      opacity: 0;
+      transform: translate(-40px, 40px);
+    }
+  }
+  @keyframes fall {
+    from {
+      transform: translateY(-80px) rotate(0);
+    }
+    to {
+      transform: translateY(105dvh) rotate(var(--spin, 360deg));
+    }
+  }
 }
 
 /* the diagonal card-back lines behind everything */
