@@ -1,0 +1,5 @@
+dist
+package-lock.json
+# the trailing space after "- [ ]" in the templates is on purpose
+.github/ISSUE_TEMPLATE
+.github/pull_request_template.md
