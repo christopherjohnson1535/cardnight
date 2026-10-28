@@ -1,4 +1,5 @@
 import { createBrowserRouter, Navigate, RouterProvider } from 'react-router'
+import { Setup as BlitzSetup } from '../games/dutch-blitz/Setup'
 import { Setup as FiveHundredSetup } from '../games/five-hundred/Setup'
 import { GameRoute } from './GameRoute'
 import { Home } from './Home'
@@ -6,6 +7,7 @@ import { Home } from './Home'
 const router = createBrowserRouter([
   { path: '/', element: <Home /> },
   { path: '/new/500', element: <FiveHundredSetup /> },
+  { path: '/new/blitz', element: <BlitzSetup /> },
   { path: '/game/:id', element: <GameRoute view="board" /> },
   { path: '/game/:id/round', element: <GameRoute view="round" /> },
   { path: '/game/:id/round/:roundId', element: <GameRoute view="round" /> },
