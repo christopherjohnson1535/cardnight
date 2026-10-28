@@ -1,14 +1,19 @@
+import { useState } from 'react'
 import { Link } from 'react-router'
 import { replay } from '../core/game'
 import { latestOpenGame, useGames } from '../core/store'
 import { useTheme } from '../core/theme'
 import { gameFor, games } from '../games/registry'
+import { Confirm } from '../ui/EndGame'
 import { ThemeToggle } from '../ui/ThemeToggle'
 
 export function Home() {
   const { theme, toggle } = useTheme()
   const allGames = useGames((state) => state.games)
   const open = latestOpenGame(allGames)
+  const saved = Object.keys(allGames).length
+  const clearGames = useGames((state) => state.clearGames)
+  const [asking, setAsking] = useState(false)
 
   return (
     <div className="mx-auto flex min-h-dvh max-w-md flex-col pb-4">
@@ -91,7 +96,29 @@ export function Home() {
 
       <footer className="mt-auto flex items-center justify-between px-5 pt-8 font-mono text-[11px] text-muted">
         <span>saved on this phone</span>
+        {saved > 0 && (
+          <button
+            type="button"
+            onClick={() => setAsking(true)}
+            className="py-2 underline-offset-4 hover:underline"
+          >
+            clear saved games
+          </button>
+        )}
       </footer>
+      <Confirm
+        open={asking}
+        onClose={() => setAsking(false)}
+        title="Clear saved games?"
+        confirmLabel={`Clear ${saved === 1 ? 'the saved game' : `all ${saved} games`}`}
+        onConfirm={() => {
+          clearGames()
+          setAsking(false)
+        }}
+      >
+        Every game on this phone is deleted, including any in progress, and the names you typed
+        won't be filled in next time. Light or dark mode stays the way you set it.
+      </Confirm>
     </div>
   )
 }

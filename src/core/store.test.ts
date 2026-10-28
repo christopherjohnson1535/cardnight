@@ -45,6 +45,19 @@ describe('game store', () => {
     expect(store.getState().games[gameId].rounds.map((r) => r.input)).toEqual([10, 2])
   })
 
+  test('clearing games keeps the theme', async () => {
+    localStorage.setItem('cardnight:theme', 'light')
+    const store = createGameStore()
+    store.getState().startGame('500', sides, {})
+    store.getState().startGame('blitz', sides, {})
+    store.getState().clearGames()
+
+    const reloaded = createGameStore()
+    await reloaded.persist.rehydrate()
+    expect(reloaded.getState().games).toEqual({})
+    expect(localStorage.getItem('cardnight:theme')).toBe('light')
+  })
+
   test('latestOpenGame skips finished games', () => {
     const store = createGameStore()
     const older = store.getState().startGame('500', sides, {})
