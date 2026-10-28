@@ -1,0 +1,10 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "cardnight",
+  "compatibility_date": "2026-10-28",
+  "assets": {
+    "directory": "./dist",
+    // any path that isn't a file gets index.html, so refreshing a deep link doesn't 404
+    "not_found_handling": "single-page-application"
+  }
+}
