@@ -1,0 +1,28 @@
+name: Epic
+description: A bigger chunk of work made of several tasks
+labels: ["epic"]
+body:
+  - type: textarea
+    id: goal
+    attributes:
+      label: What's the goal?
+      description: What someone at the table can do once this is finished.
+      placeholder: We can play a full game of 500 without paper.
+    validations:
+      required: true
+
+  - type: textarea
+    id: tasks
+    attributes:
+      label: Tasks
+      description: Link each task issue as it gets opened.
+      value: |
+        - [ ] #
+    validations:
+      required: true
+
+  - type: textarea
+    id: out
+    attributes:
+      label: Not in this one
+      placeholder: Three-player 500 can wait.

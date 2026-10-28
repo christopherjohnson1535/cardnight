@@ -1,0 +1,34 @@
+name: Task
+description: One piece of work you could finish in a sitting or two
+labels: ["task"]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What should it do?
+      description: Describe it from the card table, not from the code.
+      placeholder: When someone bids 8 hearts, I tap it once and the app knows it's worth 300.
+    validations:
+      required: true
+
+  - type: textarea
+    id: why
+    attributes:
+      label: Why
+      placeholder: Nobody remembers the bid table after the second round.
+
+  - type: input
+    id: epic
+    attributes:
+      label: Part of
+      placeholder: "#3"
+
+  - type: textarea
+    id: done
+    attributes:
+      label: Done when
+      description: Things you could check on a phone.
+      value: |
+        - [ ]
+    validations:
+      required: true

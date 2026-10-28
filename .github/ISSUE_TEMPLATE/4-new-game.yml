@@ -1,0 +1,40 @@
+name: New game
+description: A card game you'd like the app to score
+labels: ["new game"]
+body:
+  - type: input
+    id: name
+    attributes:
+      label: Game
+      placeholder: Euchre
+    validations:
+      required: true
+
+  - type: input
+    id: players
+    attributes:
+      label: Players
+      placeholder: 4, in two teams
+    validations:
+      required: true
+
+  - type: textarea
+    id: scoring
+    attributes:
+      label: How do you score a round?
+      description: The way your table does it, house rules included.
+      placeholder: The team that called trump gets 1 point for 3 or 4 tricks, 2 for all 5. If they get euchred the other team gets 2.
+    validations:
+      required: true
+
+  - type: input
+    id: win
+    attributes:
+      label: How does someone win?
+      placeholder: First team to 10
+
+  - type: input
+    id: rules
+    attributes:
+      label: Rules link
+      placeholder: https://www.pagat.com/...

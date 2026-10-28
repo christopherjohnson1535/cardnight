@@ -1,0 +1,32 @@
+name: Bug
+description: Something's wrong or broke
+labels: ["bug"]
+body:
+  - type: textarea
+    id: happened
+    attributes:
+      label: What happened?
+      placeholder: Kids went set on 7 clubs and their score went up instead of down.
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: What should have happened?
+      placeholder: They should have lost 160.
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: How to make it happen again
+      value: |
+        1.
+
+  - type: input
+    id: device
+    attributes:
+      label: Phone and browser
+      placeholder: iPhone 13, Safari
