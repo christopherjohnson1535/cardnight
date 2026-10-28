@@ -4,6 +4,7 @@ import { replay, signed } from '../../core/game'
 import { useGames } from '../../core/store'
 import type { Game } from '../../core/types'
 import { iconButton, primaryButton } from '../../ui/controls'
+import { Question } from '../../ui/Sheet'
 import {
   bidValue,
   fiveHundred,
@@ -14,6 +15,7 @@ import {
   type Hand,
   type Settings,
 } from './score'
+import { Rules } from './Rules'
 import { suitLook } from './suits'
 import { teamLooks } from './teams'
 
@@ -32,6 +34,7 @@ export function HandEntry({ game, roundId }: Props) {
   const [bidder, setBidder] = useState<string | undefined>(start?.bidder)
   const [bid, setBid] = useState<Bid | undefined>(start?.bid)
   const [tricks, setTricks] = useState<number | undefined>(start?.tricks)
+  const [rulesOpen, setRulesOpen] = useState(false)
 
   // totals before this hand, so the preview can show where each team lands
   const index = editing ? game.rounds.indexOf(editing) : game.rounds.length
@@ -72,11 +75,19 @@ export function HandEntry({ game, roundId }: Props) {
               Everyone passed
             </button>
           )}
+          <button
+            type="button"
+            aria-label="How scoring works"
+            onClick={() => setRulesOpen(true)}
+            className={`${iconButton} size-10 font-mono text-base font-semibold ${editing ? 'ml-auto' : ''}`}
+          >
+            ?
+          </button>
           <Link
             to={`/game/${game.id}`}
             replace
             aria-label="Close without saving"
-            className={`${iconButton} size-10 ${editing ? 'ml-auto' : ''}`}
+            className={`${iconButton} size-10`}
           >
             <span aria-hidden="true" className="text-xl">
               ×
@@ -86,7 +97,10 @@ export function HandEntry({ game, roundId }: Props) {
 
         <div className="flex flex-1 flex-col gap-[18px] px-4 pt-3">
           <section>
-            <h2 className="mb-2 font-medium">Who won the bid?</h2>
+            <Question
+              title="Who won the bid?"
+              help="The team that called the highest bid. They have to take at least that many tricks."
+            />
             <div className="grid grid-cols-2 gap-2">
               {game.sides.map((side, i) => {
                 const look = teamLooks[i]
@@ -117,10 +131,11 @@ export function HandEntry({ game, roundId }: Props) {
           </section>
 
           <section>
-            <div className="mb-2 flex items-baseline justify-between">
-              <h2 className="font-medium">What did they bid?</h2>
-              <span className="font-mono text-[11px] text-muted">points shown</span>
-            </div>
+            <Question
+              title="What did they bid?"
+              help="Tap the number of tricks and the trump suit. Each box shows what that bid is worth."
+              aside={<span className="font-mono text-[11px] text-muted">points shown</span>}
+            />
             <div className="grid grid-cols-[26px_repeat(5,minmax(0,1fr))] items-center gap-[5px]">
               <span />
               {SUITS.map((suit) => (
@@ -150,9 +165,10 @@ export function HandEntry({ game, roundId }: Props) {
           </section>
 
           <section>
-            <h2 className="mb-2 font-medium">
-              How many tricks did {bidderSide?.name ?? 'the bidders'} take?
-            </h2>
+            <Question
+              title={`How many tricks did ${bidderSide?.name ?? 'the bidders'} take?`}
+              help="Count the bidders' tricks. The other team gets the rest, at 10 points each."
+            />
             <div className="flex items-center gap-3.5">
               <div className="flex items-center gap-1.5 rounded-full border border-line bg-well p-[5px]">
                 <button
@@ -236,6 +252,12 @@ export function HandEntry({ game, roundId }: Props) {
           </button>
         </footer>
       </div>
+      <Rules
+        open={rulesOpen}
+        onClose={() => setRulesOpen(false)}
+        sides={game.sides}
+        settings={game.settings}
+      />
     </div>
   )
 }
