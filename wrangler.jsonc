@@ -6,5 +6,8 @@
     "directory": "./dist",
     // any path that isn't a file gets index.html, so refreshing a deep link doesn't 404
     "not_found_handling": "single-page-application"
-  }
+  },
+  // PR builds get their own preview link; they share production's settings
+  "preview_urls": true,
+  "previews": {}
 }
