@@ -2,19 +2,26 @@ import { Navigate, useParams } from 'react-router'
 import { useGames } from '../core/store'
 import type { Game } from '../core/types'
 import { Board as FiveHundredBoard } from '../games/five-hundred/Board'
+import { HandEntry as FiveHundredHand } from '../games/five-hundred/HandEntry'
 import type { Hand, Settings } from '../games/five-hundred/score'
 
-export function GameRoute() {
-  const { id = '' } = useParams()
+type View = 'board' | 'round'
+
+export function GameRoute({ view }: { view: View }) {
+  const { id = '', roundId } = useParams()
   const game = useGames((state) => state.games[id])
 
   // an old link to a game that was cleared out
   if (!game) return <Navigate to="/" replace />
 
-  switch (game.type) {
-    case '500':
-      return <FiveHundredBoard game={game as Game<Settings, Hand>} />
-    default:
-      return <Navigate to="/" replace />
+  if (game.type === '500') {
+    const typed = game as Game<Settings, Hand>
+    return view === 'round' ? (
+      <FiveHundredHand key={roundId ?? 'new'} game={typed} roundId={roundId} />
+    ) : (
+      <FiveHundredBoard game={typed} />
+    )
   }
+
+  return <Navigate to="/" replace />
 }
