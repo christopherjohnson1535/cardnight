@@ -79,7 +79,8 @@ export function Setup() {
           return (
             <div
               key={i}
-              className="flex flex-col gap-2.5 rounded-2xl border border-line bg-surface p-3.5"
+              style={{ animationDelay: `${i * 100}ms` }}
+              className="flex animate-rise flex-col gap-2.5 rounded-2xl border border-line bg-surface p-3.5"
             >
               <div className="flex items-center gap-2.5">
                 <span

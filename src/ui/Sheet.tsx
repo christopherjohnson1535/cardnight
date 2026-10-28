@@ -26,7 +26,7 @@ export function Sheet({ open, onClose, title, subtitle, children }: SheetProps) 
       aria-label={title}
       onClose={onClose}
       onClick={(event) => event.target === ref.current && onClose()}
-      className="mx-auto mt-auto mb-0 max-h-[92dvh] w-full max-w-md overflow-hidden rounded-t-[26px] border-t border-line bg-surface text-ink backdrop:bg-black/60"
+      className="mx-auto mt-auto mb-0 max-h-[92dvh] animate-sheet w-full max-w-md overflow-hidden rounded-t-[26px] border-t border-line bg-surface text-ink backdrop:bg-black/60"
     >
       <div className="flex max-h-[92dvh] flex-col">
         <div aria-hidden="true" className="mx-auto mt-2.5 h-1 w-10 shrink-0 rounded-full bg-line" />

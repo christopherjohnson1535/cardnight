@@ -60,7 +60,7 @@ export function HandEntry({ game, roundId }: Props) {
 
   return (
     <div className="mx-auto flex min-h-dvh max-w-md flex-col pt-7">
-      <div className="flex flex-1 flex-col rounded-t-[26px] border-t border-line bg-surface shadow-[0_-20px_50px_rgb(0_0_0/0.35)]">
+      <div className="flex flex-1 animate-sheet flex-col rounded-t-[26px] border-t border-line bg-surface shadow-[0_-20px_50px_rgb(0_0_0/0.35)]">
         <div aria-hidden="true" className="mx-auto mt-2.5 h-1 w-10 rounded-full bg-line" />
         <header className="flex items-center gap-3 px-4 pt-2 pb-1 pl-5">
           <h1 className="text-[22px] font-bold tracking-tight">
@@ -228,7 +228,8 @@ export function HandEntry({ game, roundId }: Props) {
                   </span>
                   <span className="flex items-baseline gap-2">
                     <span
-                      className={`text-[26px] font-semibold tabular-nums ${change !== undefined && change < 0 ? 'text-minus' : ''}`}
+                      key={change ?? 'none'}
+                      className={`animate-flash text-[26px] font-semibold tabular-nums ${change !== undefined && change < 0 ? 'text-minus' : ''}`}
                     >
                       {change === undefined ? '–' : signed(change)}
                     </span>
@@ -286,7 +287,7 @@ function BidRow({
             onClick={() => onPick({ tricks: count, suit })}
             className={`h-[46px] rounded-[10px] border text-[15px] tabular-nums transition ${
               on
-                ? 'z-10 -rotate-2 scale-105 border-pick bg-pick font-bold text-pick-ink shadow-[0_8px_20px_rgb(0_0_0/0.35)]'
+                ? 'z-10 -rotate-2 scale-105 animate-pop border-pick bg-pick font-bold text-pick-ink shadow-[0_8px_20px_rgb(0_0_0/0.35)]'
                 : 'border-line bg-well font-medium text-ink/85'
             }`}
           >
