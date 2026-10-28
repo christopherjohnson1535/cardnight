@@ -1,6 +1,8 @@
 import { Navigate, useParams } from 'react-router'
 import { useGames } from '../core/store'
 import type { Game } from '../core/types'
+import { Board as BlitzBoard } from '../games/dutch-blitz/Board'
+import type { Round, Settings as BlitzSettings } from '../games/dutch-blitz/score'
 import { Board as FiveHundredBoard } from '../games/five-hundred/Board'
 import { HandEntry as FiveHundredHand } from '../games/five-hundred/HandEntry'
 import type { Hand, Settings } from '../games/five-hundred/score'
@@ -21,6 +23,11 @@ export function GameRoute({ view }: { view: View }) {
     ) : (
       <FiveHundredBoard game={typed} />
     )
+  }
+
+  if (game.type === 'blitz') {
+    const typed = game as Game<BlitzSettings, Round>
+    return <BlitzBoard game={typed} />
   }
 
   return <Navigate to="/" replace />

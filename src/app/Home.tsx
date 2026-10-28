@@ -2,8 +2,7 @@ import { Link } from 'react-router'
 import { replay } from '../core/game'
 import { latestOpenGame, useGames } from '../core/store'
 import { useTheme } from '../core/theme'
-import { games, definitionFor } from '../games/registry'
-import { teamLooks } from '../games/five-hundred/teams'
+import { gameFor, games } from '../games/registry'
 import { ThemeToggle } from '../ui/ThemeToggle'
 
 export function Home() {
@@ -99,8 +98,9 @@ export function Home() {
 
 function ContinueCard({ gameId }: { gameId: string }) {
   const game = useGames((state) => state.games[gameId])
-  const definition = definitionFor(game.type)
-  if (!definition) return null
+  const entry = gameFor(game.type)
+  const definition = entry?.definition
+  if (!entry || !definition) return null
 
   const { totals, rounds } = replay(definition, game)
   const next = String(rounds.length + 1).padStart(2, '0')
@@ -116,15 +116,19 @@ function ContinueCard({ gameId }: { gameId: string }) {
       <p className="mt-0.5 mb-3.5 text-[30px] font-bold tracking-tight">{definition.name}</p>
       <div className="flex flex-col gap-3">
         {game.sides.map((side, i) => {
-          const look = teamLooks[i] ?? teamLooks[0]
+          const look = entry.look?.(i) ?? { bar: 'bg-accent' }
           const share = Math.max(0, Math.min(1, totals[side.id] / definition.target))
           return (
             <div key={side.id} className="flex flex-col gap-1.5">
               <div className="flex items-baseline justify-between">
                 <span className="flex items-center gap-2 font-medium">
-                  <span aria-hidden="true" className={look.red ? 'text-suit-red' : ''}>
-                    {look.suit}
-                  </span>
+                  {look.glyph ? (
+                    <span aria-hidden="true" className={look.red ? 'text-suit-red' : ''}>
+                      {look.glyph}
+                    </span>
+                  ) : (
+                    <span aria-hidden="true" className={`h-3.5 w-2.5 rounded-[3px] ${look.chip}`} />
+                  )}
                   {side.name}
                 </span>
                 <span className="text-2xl font-semibold tabular-nums">{totals[side.id]}</span>
