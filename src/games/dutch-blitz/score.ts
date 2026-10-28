@@ -3,8 +3,9 @@ import type { GameDefinition, Outcome, ScoreContext, Totals } from '../../core/g
 export const TARGET = 75
 export const MIN_PLAYERS = 2
 export const MAX_PLAYERS = 6
-// a Blitz pile starts with ten cards
+// a Blitz pile starts with ten cards, and a whole deck is forty
 export const PILE_SIZE = 10
+export const MAX_MIDDLE = 40
 
 // What one player counts at the end of a round
 export type Count = {

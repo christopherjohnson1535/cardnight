@@ -1,6 +1,7 @@
+import { Link } from 'react-router'
 import { replay } from '../../core/game'
 import type { Game } from '../../core/types'
-import { TopBar } from '../../ui/controls'
+import { primaryButton, TopBar } from '../../ui/controls'
 import { playerLook } from './players'
 import { dutchBlitz, TARGET, type Round, type Settings } from './score'
 
@@ -29,6 +30,15 @@ export function Board({ game }: { game: Game<Settings, Round> }) {
           </li>
         ))}
       </ol>
+
+      <div className="sticky bottom-0 mt-auto bg-gradient-to-t from-table from-70% to-transparent px-5 pt-6 pb-6">
+        <Link to={`/game/${game.id}/round`} className={primaryButton}>
+          Enter round {next}{' '}
+          <span aria-hidden="true" className="text-[22px]">
+            +
+          </span>
+        </Link>
+      </div>
     </div>
   )
 }

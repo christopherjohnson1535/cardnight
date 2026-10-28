@@ -67,3 +67,8 @@ export function signed(n: number) {
   if (n < 0) return `−${Math.abs(n)}`
   return '0'
 }
+
+// a plain number with a real minus sign when it's negative
+export function num(n: number) {
+  return n < 0 ? `−${Math.abs(n)}` : String(n)
+}
