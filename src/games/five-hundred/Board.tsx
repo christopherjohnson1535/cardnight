@@ -14,11 +14,11 @@ import { Rules } from './Rules'
 import { fiveHundred, TARGET, type Hand, type Settings } from './score'
 import { teamLooks } from './teams'
 
-export function Board({ game }: { game: Game<Settings, Hand> }) {
+export function Board({ game, docked }: { game: Game<Settings, Hand>; docked?: boolean }) {
   const { outcome } = replay(fiveHundred, game)
   useKeepFinished(game, outcome !== null)
 
-  return outcome ? <Finished game={game} /> : <Scores game={game} />
+  return outcome ? <Finished game={game} /> : <Scores game={game} docked={docked} />
 }
 
 function Finished({ game }: { game: Game<Settings, Hand> }) {
@@ -57,7 +57,7 @@ function Finished({ game }: { game: Game<Settings, Hand> }) {
   )
 }
 
-function Scores({ game }: { game: Game<Settings, Hand> }) {
+function Scores({ game, docked }: { game: Game<Settings, Hand>; docked?: boolean }) {
   const { totals, rounds } = replay(fiveHundred, game)
   const next = String(rounds.length + 1).padStart(2, '0')
   const last = rounds.at(-1)
@@ -109,7 +109,7 @@ function Scores({ game }: { game: Game<Settings, Hand> }) {
       <History gameId={game.id} sides={game.sides} rounds={rounds} />
       <EndGame gameId={game.id} />
 
-      <BoardFooter game={game} roundName="hand" />
+      <BoardFooter game={game} roundName="hand" docked={docked} />
     </div>
   )
 }

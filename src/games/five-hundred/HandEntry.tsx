@@ -4,6 +4,7 @@ import { replay, signed } from '../../core/game'
 import { useGames } from '../../core/store'
 import type { Game } from '../../core/types'
 import { iconButton, primaryButton } from '../../ui/controls'
+import { entryPage, entryPanel } from '../../ui/entry'
 import { Question } from '../../ui/Sheet'
 import {
   bidValue,
@@ -23,9 +24,11 @@ type Props = {
   game: Game<Settings, Hand>
   // set when fixing a hand that's already saved
   roundId?: string
+  // shown beside the scoreboard on a wide screen
+  docked?: boolean
 }
 
-export function HandEntry({ game, roundId }: Props) {
+export function HandEntry({ game, roundId, docked = false }: Props) {
   const navigate = useNavigate()
   const { addRound, editRound } = useGames()
   const editing = game.rounds.find((round) => round.id === roundId)
@@ -59,9 +62,11 @@ export function HandEntry({ game, roundId }: Props) {
   const otherSide = game.sides.find((side) => side.id !== bidder)
 
   return (
-    <div className="mx-auto flex min-h-dvh max-w-md flex-col pt-7">
-      <div className="flex flex-1 animate-sheet flex-col rounded-t-[26px] border-t border-line bg-surface shadow-[0_-20px_50px_rgb(0_0_0/0.35)]">
-        <div aria-hidden="true" className="mx-auto mt-2.5 h-1 w-10 rounded-full bg-line" />
+    <div className={entryPage(docked)}>
+      <div className={entryPanel(docked)}>
+        {!docked && (
+          <div aria-hidden="true" className="mx-auto mt-2.5 h-1 w-10 rounded-full bg-line" />
+        )}
         <header className="flex items-center gap-3 px-4 pt-2 pb-1 pl-5">
           <h1 className="text-[22px] font-bold tracking-tight">
             {editing ? `Fix hand ${handNumber}` : `Hand ${handNumber}`}
@@ -83,16 +88,18 @@ export function HandEntry({ game, roundId }: Props) {
           >
             ?
           </button>
-          <Link
-            to={`/game/${game.id}`}
-            replace
-            aria-label="Close without saving"
-            className={`${iconButton} size-10`}
-          >
-            <span aria-hidden="true" className="text-xl">
-              ×
-            </span>
-          </Link>
+          {(!docked || editing) && (
+            <Link
+              to={`/game/${game.id}`}
+              replace
+              aria-label="Close without saving"
+              className={`${iconButton} size-10`}
+            >
+              <span aria-hidden="true" className="text-xl">
+                ×
+              </span>
+            </Link>
+          )}
         </header>
 
         <div className="flex flex-1 flex-col gap-[18px] px-4 pt-3">
