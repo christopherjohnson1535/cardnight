@@ -13,17 +13,9 @@ import {
   type Bid,
   type Hand,
   type Settings,
-  type Suit,
 } from './score'
+import { suitLook } from './suits'
 import { teamLooks } from './teams'
-
-const suitLook: Record<Suit, { glyph: string; red: boolean; name: string }> = {
-  s: { glyph: '♠', red: false, name: 'spades' },
-  c: { glyph: '♣', red: false, name: 'clubs' },
-  d: { glyph: '♦', red: true, name: 'diamonds' },
-  h: { glyph: '♥', red: true, name: 'hearts' },
-  n: { glyph: 'NT', red: false, name: 'no trumps' },
-}
 
 type Props = {
   game: Game<Settings, Hand>
