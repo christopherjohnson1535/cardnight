@@ -95,6 +95,7 @@
   --animate-sheet: sheet 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
   --animate-flash: flash 0.5s cubic-bezier(0.22, 1, 0.36, 1);
   --animate-highlight: highlight 1.4s ease 0.9s both;
+  --animate-stamp: stamp 0.55s cubic-bezier(0.2, 0.9, 0.25, 1.3) both;
   --animate-fall: fall 6s linear infinite both;
 
   @keyframes rise {
@@ -156,6 +157,12 @@
     from {
       background-color: transparent;
       color: inherit;
+    }
+  }
+  @keyframes stamp {
+    from {
+      opacity: 0;
+      transform: scale(1.8) rotate(-12deg);
     }
   }
   @keyframes fall {
